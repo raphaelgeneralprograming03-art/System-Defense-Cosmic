@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matriz de Evolução Cósmica - Tríade de Naves</title>
+    <title>Painel Tríade - Cenário Cósmico Completo</title>
     <style>
         :root {
-            --bg-dark: #030308;
-            --panel-bg: rgba(8, 8, 20, 0.9);
-            --neon-blue: #00d2ff;
-            --neon-green: #2eff70;
-            --neon-purple: #b500ff;
+            --bg-color: #020205;
+            --panel-bg: rgba(6, 6, 18, 0.9);
+            --neon-blue: #00f3ff;
+            --neon-green: #39ff14;
+            --neon-purple: #bd00ff;
             --neon-red: #ff0055;
-            --neon-amber: #ffaa00;
-            --text-light: #d8d8f0;
+            --text-main: #e0e0ff;
         }
 
         * {
@@ -24,8 +23,8 @@
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
+            background-color: var(--bg-color);
+            color: var(--text-main);
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             height: 100vh;
@@ -34,228 +33,245 @@
         }
 
         header {
-            background: linear-gradient(180deg, rgba(181,0,255,0.1) 0%, transparent 100%);
-            border-bottom: 1px solid rgba(181, 0, 255, 0.3);
-            padding: 12px 20px;
+            background: linear-gradient(180deg, rgba(0,243,255,0.15) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 20;
         }
 
         header h1 {
-            font-size: 1.2rem;
-            color: var(--neon-purple);
-            text-shadow: 0 0 8px rgba(181, 0, 255, 0.5);
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .system-status {
+            font-size: 0.85rem;
+            color: var(--neon-green);
         }
 
         .main-container {
             display: flex;
             flex: 1;
-            height: calc(100vh - 50px);
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            position: relative;
         }
 
         /* Painel Lateral */
         .control-panel {
-            width: 350px;
+            width: 330px;
             background: var(--panel-bg);
-            border-right: 1px solid rgba(0, 210, 255, 0.2);
-            padding: 15px;
+            border-right: 1px solid rgba(0, 243, 255, 0.25);
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
             overflow-y: auto;
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px);
+            z-index: 20;
         }
 
         .section-title {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--neon-blue);
-            border-bottom: 1px dashed rgba(0, 210, 255, 0.3);
-            padding-bottom: 4px;
+            border-bottom: 1px dashed rgba(0, 243, 255, 0.4);
+            padding-bottom: 5px;
+            margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .grid-selector {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .btn-opt {
+        .danger-btn {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #a0a0c0;
-            padding: 10px;
+            border: 1px solid rgba(0, 243, 255, 0.25);
+            color: #b0b0d0;
+            padding: 12px;
             text-align: left;
             cursor: pointer;
             border-radius: 4px;
+            transition: all 0.2s ease;
             font-family: inherit;
             font-size: 0.8rem;
-            transition: all 0.2s ease;
         }
 
-        .btn-opt:hover {
-            background: rgba(0, 210, 255, 0.08);
+        .danger-btn:hover {
+            background: rgba(0, 243, 255, 0.08);
             border-color: var(--neon-blue);
         }
 
-        .btn-opt.active {
+        .danger-btn.active {
+            background: rgba(189, 0, 255, 0.15);
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 12px rgba(189, 0, 255, 0.4);
             color: #fff;
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
-        }
-
-        /* Cores dinâmicas para os botões ativos dependendo do estado */
-        .btn-danger.active { border-color: var(--neon-red); background: rgba(255, 0, 85, 0.1); }
-        .btn-method.active { border-color: var(--neon-green); background: rgba(46, 255, 112, 0.1); }
-
-        /* Monitor de Status */
-        .status-display {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .status-row {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .status-val {
             font-weight: bold;
         }
 
-        /* Área de Simulação */
+        .telemetry-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 243, 255, 0.15);
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .telemetry-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .telemetry-value {
+            color: var(--neon-blue);
+            font-weight: bold;
+        }
+
+        /* Área do Espaço */
         .simulation-area {
             flex: 1;
             position: relative;
             background: #010103;
+            overflow: hidden;
         }
 
         canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             display: block;
+            z-index: 10;
         }
 
-        /* Interface HUD inferior */
-        .hud-bottom {
+        /* Interface Sobreposta */
+        .hud-overlay {
             position: absolute;
-            bottom: 15px;
-            left: 15px;
-            right: 15px;
-            background: rgba(3, 3, 6, 0.9);
-            border: 1px solid rgba(0, 210, 255, 0.2);
-            padding: 12px;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(4, 4, 12, 0.9);
+            border: 1px solid rgba(189, 0, 255, 0.3);
+            padding: 15px;
             border-radius: 4px;
             pointer-events: none;
+            backdrop-filter: blur(8px);
+            z-index: 20;
         }
 
-        .hud-header {
-            display: flex;
-            justify-content: space-between;
+        .hud-title {
+            color: var(--neon-purple);
+            font-size: 0.95rem;
             margin-bottom: 6px;
-            font-size: 0.85rem;
-            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .hud-desc {
-            font-size: 0.75rem;
-            line-height: 1.4;
-            color: #a5a5c5;
+            font-size: 0.8rem;
+            color: #b5b5d5;
+            line-height: 1.5;
+        }
+
+        .scale-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 0, 85, 0.15);
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 20;
+            box-shadow: 0 0 8px rgba(255, 0, 85, 0.3);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>MATRIZ ANALÍTICA: ANÁLISE DE SOBREVIVÊNCIA DA TRÍADE</h1>
-        <div id="global-safety" style="font-size: 0.85rem; font-weight: bold; color: var(--neon-red);">SEGURANÇA: VULNERÁVEL</div>
+        <h1>SISTEMA DE DEFESA DA TRÍADE - CENÁRIO REALISTA</h1>
+        <div class="system-status">ESTABILIZAÇÃO CÓSMICA ATIVA: 99.99991% c</div>
     </header>
 
     <div class="main-container">
-        <!-- Painel de Configurações -->
+        <!-- Painel Lateral -->
         <div class="control-panel">
-            <div class="section-title">1. Selecionar Perigo Original</div>
-            <div class="grid-selector">
-                <button class="btn-opt btn-danger active" onclick="setDanger('hawking')">A. Radiação Hawking / Térmica</button>
-                <button class="btn-opt btn-danger" onclick="setDanger('tide')">B. Forças de Maré (Espaguetificação)</button>
-                <button class="btn-opt btn-danger" onclick="setDanger('collapse')">C. Instabilidade e Colapso Crônico</button>
-            </div>
+            <div class="section-title">Ameaças Espaciais</div>
+            <button class="danger-btn active" onclick="switchDanger('supernova')">1. Supernova Cósmica</button>
+            <button class="danger-btn" onclick="switchDanger('grb')">2. Surto de Raios Gama (GRB)</button>
+            <button class="danger-btn" onclick="switchDanger('blackhole')">3. Buraco Negro Supermassivo</button>
+            <button class="danger-btn" onclick="switchDanger('gravwave')">4. Onda Gravitacional Extrema</button>
+            <button class="danger-btn" onclick="switchDanger('vacuum')">5. Decaimento do Vácuo Quântico</button>
+            <button class="danger-btn" onclick="switchDanger('blueshift')">6. Radiação com Desvio Azul</button>
 
-            <div class="section-title" style="margin-top: 10px;">2. Configuração de Metodologia</div>
-            <div class="grid-selector">
-                <button class="btn-opt btn-method active" onclick="setMethod(1)">MÉTODO 1: Tríade Convencional (Estática)</button>
-                <button class="btn-opt btn-method" onclick="setMethod(2)">MÉTODO 2: Tríade + Velocidade da Luz (99.99991%c)</button>
-                <button class="btn-opt btn-method" onclick="setMethod(3)">MÉTODO 3: Tríade + V.Luz + Matéria Negativa</button>
-                <button class="btn-opt btn-method" onclick="setMethod(4)">MÉTODO 4: Fusão Total (Tríades Completas)</button>
-            </div>
-
-            <div class="section-title" style="margin-top: 10px;">Monitor de Parâmetros</div>
-            <div class="status-display">
-                <div class="status-row"><span>Velocidade Angular:</span><span id="p-vel" class="status-val">0 km/s</span></div>
-                <div class="status-row"><span>Massa Relativística:</span><span id="p-mass" class="status-val">1.0x (Estática)</span></div>
-                <div class="status-row"><span>Fluxo Matéria Negativa:</span><span id="p-neg" class="status-val">0.00 kg/s</span></div>
-                <div class="status-row"><span>Captura Matéria Escura:</span><span id="p-dark" class="status-val">INATIVA</span></div>
-                <div class="status-row"><span>Estabilidade do Espaço-Tempo:</span><span id="p-stab" class="status-val" style="color:var(--neon-red)">CRÍTICA</span></div>
+            <div class="section-title" style="margin-top: 10px;">Telemetria Analítica</div>
+            <div class="telemetry-box">
+                <div class="telemetry-row"><span>Velocidade Giro:</span><span class="telemetry-value">0.9999991 c</span></div>
+                <div class="telemetry-row"><span>Fator Lorentz:</span><span class="telemetry-value">745.35x</span></div>
+                <div class="telemetry-row"><span>Matéria Negativa:</span><span id="tel-neg" class="telemetry-value">--</span></div>
+                <div class="telemetry-row"><span>Matéria Escura:</span><span id="tel-dark" class="telemetry-value">--</span></div>
+                <div class="telemetry-row"><span>Escudos da Tríade:</span><span class="telemetry-value" style="color:var(--neon-green)">100% OPERACIONAIS</span></div>
+                <div class="telemetry-row"><span>Status Planetário:</span><span class="telemetry-value" style="color:var(--neon-green)">PROTEÇÃO TOTAL</span></div>
             </div>
         </div>
 
-        <!-- Área de Renderização -->
+        <!-- Área Espacial -->
         <div class="simulation-area">
-            <canvas id="evolCanvas"></canvas>
+            <div id="scale-indicator" class="scale-badge">Carregando...</div>
+            <canvas id="simCanvas"></canvas>
             
-            <div class="hud-bottom">
-                <div class="hud-header">
-                    <span id="hud-title-text" style="color: var(--neon-blue);">MÉTODO 1 VS RADIAÇÃO HAWKING</span>
-                    <span id="hud-status-badge" style="color: var(--neon-red);">STATUS: DESTRUIÇÃO DA FROTA</span>
-                </div>
-                <div id="hud-body-text" class="hud-desc">Carregando dados matemáticos...</div>
+            <div class="hud-overlay">
+                <div id="hud-name" class="hud-title">Carregando...</div>
+                <div id="hud-text" class="hud-desc">Iniciando renderização matemática do espaço sideral...</div>
             </div>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('evolCanvas');
+        const canvas = document.getElementById('simCanvas');
         const ctx = canvas.getContext('2d');
 
-        function resize() {
+        function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
         }
-        window.addEventListener('resize', resize);
-        resize();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        // Estados
-        let activeDanger = 'hawking';
-        let activeMethod = 1;
-        let tick = 0;
+        // Inicialização de variáveis de tempo e estado
+        let currentDanger = 'supernova';
+        let time = 0;
 
-        // Base de Dados de Simulação Cruzada Matrix[Perigo][Método]
-        const simulationMatrix = {
-            hawking: {
-                name: "Radiação Hawking / Térmica Extrema",
-                methods: {
-                    1: {
-                        title: "MÉTODO 1: Tríade Convencional (Sem V.Luz / Sem Buraco)",
-                        status: "DESTRUIÇÃO IMINENTE",
-                        color: "var(--neon-red)",
-                        text: "As três naves operam em posições fixas no espaço normal. Sem a dilatação temporal ou campos exóticos, o calor térmico e a emissão de partículas subatômicas evaporam instantaneamente as blindagens mecânicas das naves A, B e da Sonda Central. Falha estrutural catastrófica.",
-                        stab: "0.01% - Caótica", vel: "0 km/s", mass: "1.0x", neg: "0.00 kg/s", dark: "INATIVA"
-                    },
-                    2: {
-                        title: "MÉTODO 2: Tríade em Rotação Relativística (99.99991% c)",
-                        status: "DANOS GRAVES / INSUFICIENTE",
-                        color: "var(--neon-amber)",
-                        text: "A rotação a 99.99991%c faz o tempo passar 745 vezes mais devagar para as naves A e B, diminuindo a taxa de absorção de radiação. Contudo, a Sonda Central estacionária no centro acumula o calor comprimido (Blueshift), sofrendo derretimento de seus sistemas eletrônicos internos.",
-                        stab: "14.2% - Instável", vel: "299.792,2 km/s", mass: "745.35x", neg: "0.00 kg/s", dark: "INATIVA"
-                    },
-                    3: {
-                        title: "MÉTODO 3: Tríade + Velocidade da Luz + Matéria Negativa",
-                        status: "SUPORTADO COM RISCO",
-                        color: "var(--neon-blue)",
+        // Gerador interno de estrelas para remover o fundo preto estático
+        const stars = [];
+        for(let i = 0; i < 150; i++) {
+            stars.push({
+                x: Math.random(),
+                y: Math.random(),
+                size: Math.random() * 1.8 + 0.5,
+                twinkle: Math.random()
+            });
+        }
+
+        const dangerData = {
+            supernova: {
+                name: "1. Supernova Cósmica (Magnitude: ExaJoules Estelares)",
+                text: "A explosão estelar ejeta uma onda térmica maciça. A Tríade injeta Matéria Escura na borda do portal, criando uma lente gravitacional visível que curva o espaço-tempo, forçando a destruição a contornar o nosso planeta sem nos tocar.",
+                scale: "Magnitude: ExaJoules", neg: "4.5 x 10^22 kg/s", dark: "9.8 x 10^26 kg/s"
+            },
+            grb: {
+                name: "2. Surto de Raios Gama - GRB (Magnitude: Feixe Relativístico)",
+                text: "Um feixe hiper-concentrado de radiação pura avança em linha reta. As naves A e B geram Matéria Negativa em alta densidade, criando uma repulsão antigravitacional que refrata e espalha o feixe letal para longe das constelações habitadas.",
+                scale: "Magnitude: YottaWatts", neg: "8.9 x 10^24 kg/s", dark: "1.2 x 10^22 kg/s"
+            },
+            blackhole: {
+                name: "3. Buraco Negro Supermassivo (Magnitude: Bilhões de Massas Solares)",
