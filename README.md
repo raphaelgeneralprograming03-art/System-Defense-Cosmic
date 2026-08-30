@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Tríade - Cenário Cósmico Completo</title>
+    <title>Painel Tríade - Sistema de Defesa Cósmico</title>
     <style>
         :root {
-            --bg-color: #020205;
-            --panel-bg: rgba(6, 6, 18, 0.9);
+            --bg-color: #020206;
+            --panel-bg: rgba(6, 6, 20, 0.92);
             --neon-blue: #00f3ff;
             --neon-green: #39ff14;
             --neon-purple: #bd00ff;
@@ -39,7 +39,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 20;
+            z-index: 30;
         }
 
         header h1 {
@@ -57,7 +57,6 @@
             display: flex;
             flex: 1;
             height: calc(100vh - 60px);
-            overflow: hidden;
             position: relative;
         }
 
@@ -69,10 +68,10 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             overflow-y: auto;
             backdrop-filter: blur(15px);
-            z-index: 20;
+            z-index: 30;
         }
 
         .section-title {
@@ -82,7 +81,6 @@
             padding-bottom: 5px;
             margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .danger-btn {
@@ -135,8 +133,8 @@
         .simulation-area {
             flex: 1;
             position: relative;
-            background: #010103;
-            overflow: hidden;
+            background: #020208;
+            height: 100%;
         }
 
         canvas {
@@ -155,13 +153,13 @@
             bottom: 20px;
             left: 20px;
             right: 20px;
-            background: rgba(4, 4, 12, 0.9);
-            border: 1px solid rgba(189, 0, 255, 0.3);
+            background: rgba(4, 4, 12, 0.93);
+            border: 1px solid rgba(189, 0, 255, 0.35);
             padding: 15px;
             border-radius: 4px;
             pointer-events: none;
             backdrop-filter: blur(8px);
-            z-index: 20;
+            z-index: 30;
         }
 
         .hud-title {
@@ -169,7 +167,6 @@
             font-size: 0.95rem;
             margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .hud-desc {
@@ -189,17 +186,15 @@
             font-size: 0.7rem;
             border-radius: 3px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            z-index: 20;
-            box-shadow: 0 0 8px rgba(255, 0, 85, 0.3);
+            z-index: 30;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>SISTEMA DE DEFESA DA TRÍADE - CENÁRIO REALISTA</h1>
-        <div class="system-status">ESTABILIZAÇÃO CÓSMICA ATIVA: 99.99991% c</div>
+        <h1>SISTEMA DE DEFESA DA TRÍADE (MHD / S.A.M.S / SROS)</h1>
+        <div class="system-status">COLETA DE COMBUSTÍVEL DO VÁCUO (H & He): ATIVA</div>
     </header>
 
     <div class="main-container">
@@ -219,8 +214,8 @@
                 <div class="telemetry-row"><span>Fator Lorentz:</span><span class="telemetry-value">745.35x</span></div>
                 <div class="telemetry-row"><span>Matéria Negativa:</span><span id="tel-neg" class="telemetry-value">--</span></div>
                 <div class="telemetry-row"><span>Matéria Escura:</span><span id="tel-dark" class="telemetry-value">--</span></div>
-                <div class="telemetry-row"><span>Escudos da Tríade:</span><span class="telemetry-value" style="color:var(--neon-green)">100% OPERACIONAIS</span></div>
-                <div class="telemetry-row"><span>Status Planetário:</span><span class="telemetry-value" style="color:var(--neon-green)">PROTEÇÃO TOTAL</span></div>
+                <div class="telemetry-row"><span>Escudos MHD:</span><span class="telemetry-value" style="color:var(--neon-green)">ESTÁVEL</span></div>
+                <div class="telemetry-row"><span>S.A.M.S / SROS:</span><span class="telemetry-value" style="color:var(--neon-green)">SINCRONIZADO</span></div>
             </div>
         </div>
 
@@ -231,7 +226,7 @@
             
             <div class="hud-overlay">
                 <div id="hud-name" class="hud-title">Carregando...</div>
-                <div id="hud-text" class="hud-desc">Iniciando renderização matemática do espaço sideral...</div>
+                <div id="hud-text" class="hud-desc">Iniciando alinhamento dos escudos quânticos...</div>
             </div>
         </div>
     </div>
@@ -240,38 +235,38 @@
         const canvas = document.getElementById('simCanvas');
         const ctx = canvas.getContext('2d');
 
-        function resizeCanvas() {
+        // Garantir o dimensionamento correto antes de qualquer desenho
+        canvas.width = canvas.parentElement.clientWidth || 800;
+        canvas.height = canvas.parentElement.clientHeight || 600;
+
+        window.addEventListener('resize', () => {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        });
 
-        // Inicialização de variáveis de tempo e estado
         let currentDanger = 'supernova';
         let time = 0;
 
-        // Gerador interno de estrelas para remover o fundo preto estático
+        // Gerar coordenadas de estrelas
         const stars = [];
-        for(let i = 0; i < 150; i++) {
-            stars.push({
-                x: Math.random(),
-                y: Math.random(),
-                size: Math.random() * 1.8 + 0.5,
-                twinkle: Math.random()
-            });
+        for(let i = 0; i < 120; i++) {
+            stars.push({ x: Math.random(), y: Math.random(), size: Math.random() * 1.5 + 0.5 });
         }
 
         const dangerData = {
             supernova: {
                 name: "1. Supernova Cósmica (Magnitude: ExaJoules Estelares)",
-                text: "A explosão estelar ejeta uma onda térmica maciça. A Tríade injeta Matéria Escura na borda do portal, criando uma lente gravitacional visível que curva o espaço-tempo, forçando a destruição a contornar o nosso planeta sem nos tocar.",
+                text: "A onda de energia e plasma da estrela colide contra o escudo. A Tríade canaliza Matéria Escura pelas bordas do portal via SROS, gerando uma lente gravitacional macroscópica que curva e desvia a destruição ao redor do planeta protegido.",
                 scale: "Magnitude: ExaJoules", neg: "4.5 x 10^22 kg/s", dark: "9.8 x 10^26 kg/s"
             },
             grb: {
                 name: "2. Surto de Raios Gama - GRB (Magnitude: Feixe Relativístico)",
-                text: "Um feixe hiper-concentrado de radiação pura avança em linha reta. As naves A e B geram Matéria Negativa em alta densidade, criando uma repulsão antigravitacional que refrata e espalha o feixe letal para longe das constelações habitadas.",
+                text: "O feixe linear de alta energia atinge o perímetro. O sistema de deflexão do MHD aciona os jatos de Matéria Negativa, gerando uma repulsão métrica (antigravidade). O feixe de fótons é refratado e expelido para o vácuo.",
                 scale: "Magnitude: YottaWatts", neg: "8.9 x 10^24 kg/s", dark: "1.2 x 10^22 kg/s"
             },
             blackhole: {
                 name: "3. Buraco Negro Supermassivo (Magnitude: Bilhões de Massas Solares)",
+                text: "A atração gravitacional esmagadora tenta reter o sistema. A Sonda Central, amparada pelo amortecimento inercial do S.A.M.S, projeta um fluxo de massa exótica criando o canal do Buraco de Minhoca para evasão imediata.",
+                scale: "Magnitude: Escala Métrica", neg: "7.7 x 10^27 kg/s", dark: "3.4 x 10^25 kg/s"
+            },
+            gravwave: {
